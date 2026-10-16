@@ -5,8 +5,8 @@ Welcome to your new TanStack Start app!
 To run this application:
 
 ```bash
-pnpm install
-pnpm dev
+bun install
+bun dev
 ```
 
 # Building For Production
@@ -14,7 +14,7 @@ pnpm dev
 To build this application for production:
 
 ```bash
-pnpm build
+bun run build
 ```
 
 ## Styling
@@ -36,7 +36,7 @@ If you prefer not to use Tailwind CSS:
 Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
 
 ```bash
-pnpm dlx shadcn@latest add button
+bun dlx shadcn@latest add button
 ```
 
 
@@ -45,7 +45,7 @@ pnpm dlx shadcn@latest add button
 1. Generate and set the `BETTER_AUTH_SECRET` environment variable in your `.env.local`:
 
    ```bash
-   pnpm dlx @better-auth/cli secret
+   bun x @better-auth/cli secret
    ```
 
 2. Visit the [Better Auth documentation](https://www.better-auth.com) to unlock the full potential of authentication in your app.
@@ -70,7 +70,7 @@ export const auth = betterAuth({
 Then run migrations:
 
 ```bash
-pnpm dlx @better-auth/cli migrate
+bun x @better-auth/cli migrate
 ```
 
 
