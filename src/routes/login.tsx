@@ -4,21 +4,11 @@ import { useEffect, useState } from "react";
 import { authClient } from "#/lib/auth-client";
 
 export const Route = createFileRoute("/login")({ component: Login });
-
 function Login() {
-  const navigate = useNavigate();
-  const { data: session, isPending } = authClient.useSession();
+  const navigate = useNavigate(); const { data: session, isPending } = authClient.useSession();
   const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [showPassword, setShowPassword] = useState(false); const [error, setError] = useState(""); const [loading, setLoading] = useState(false);
   useEffect(() => { if (session?.user) void navigate({ to: "/dashboard", replace: true }); }, [session, navigate]);
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); setError(""); setLoading(true);
-    try {
-      const result = await authClient.signIn.email({ email: email.trim(), password });
-      if (result.error) { setError(result.error.message || "Email atau kata sandi salah."); return; }
-      await navigate({ to: "/dashboard", replace: true });
-    } catch { setError("Tidak dapat masuk saat ini. Periksa koneksi dan coba lagi."); }
-    finally { setLoading(false); }
-  };
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => { event.preventDefault(); setError(""); setLoading(true); try { const result = await authClient.signIn.email({ email: email.trim(), password }); if (result.error) { setError(result.error.message || "Email atau kata sandi salah."); return; } await navigate({ to: "/dashboard", replace: true }); } catch { setError("Tidak dapat masuk saat ini. Periksa koneksi dan coba lagi."); } finally { setLoading(false); } };
   return <main className="page-wrap px-4 py-10 sm:py-16"><div className="mx-auto grid max-w-5xl overflow-hidden rounded-[2rem] border border-[var(--line)] bg-[var(--surface-strong)] shadow-[0_28px_90px_rgba(15,55,52,0.12)] md:grid-cols-[0.95fr_1.05fr]">
     <aside className="relative hidden overflow-hidden bg-[var(--sea-ink)] p-10 text-white md:flex md:flex-col md:justify-between"><div className="absolute -right-24 -top-16 h-72 w-72 rounded-full bg-[#60d7cf]/20 blur-2xl" /><div className="relative flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#60d7cf] text-[#123b3a]"><Package2 size={23} /></span><div><p className="m-0 text-sm font-extrabold tracking-widest">EKRAF</p><p className="m-0 text-[10px] uppercase tracking-[0.2em] text-white/65">Commerce studio</p></div></div><div className="relative"><p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1.5 text-xs text-white/80"><ShieldCheck size={14} /> A secure workspace</p><h1 className="display-title mb-4 text-4xl font-bold leading-tight">Good work starts with a clear view.</h1><p className="m-0 max-w-sm text-sm leading-7 text-white/70">Bring products and people together in one calmer, more organized workflow.</p></div><p className="relative m-0 text-xs text-white/50">Built to keep your day moving.</p></aside>
     <section className="p-6 sm:p-10 lg:p-12"><Link to="/" className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[var(--sea-ink-soft)] no-underline hover:text-[var(--sea-ink)] md:hidden"><Package2 size={18} /> EKRAF</Link>
