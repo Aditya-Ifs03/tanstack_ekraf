@@ -6,14 +6,8 @@ import { seedAdmin } from "@/lib/server/auth";
 
 export const Route = createFileRoute("/setup")({ component: Setup });
 function Setup() {
-  const seedAdminFn = useServerFn(seedAdmin);
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [message, setMessage] = useState(""); const [alreadySeeded, setAlreadySeeded] = useState(false);
-  const handleSeed = async () => {
-    setStatus("loading"); setMessage("");
-    try { const result = await seedAdminFn(); setAlreadySeeded(result.alreadySeeded); setStatus("success"); setMessage(result.alreadySeeded ? "Admin account already exists. No changes were needed." : "Admin account and sample catalog created successfully."); }
-    catch (error) { setStatus("error"); setMessage(error instanceof Error ? error.message : "Setup failed. Please try again."); }
-  };
+  const seedAdminFn = useServerFn(seedAdmin); const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle"); const [message, setMessage] = useState(""); const [alreadySeeded, setAlreadySeeded] = useState(false);
+  const handleSeed = async () => { setStatus("loading"); setMessage(""); try { const result = await seedAdminFn(); setAlreadySeeded(result.alreadySeeded); setStatus("success"); setMessage(result.alreadySeeded ? "Admin account already exists. No changes were needed." : "Admin account and sample catalog created successfully."); } catch (error) { setStatus("error"); setMessage(error instanceof Error ? error.message : "Setup failed. Please try again."); } };
   return <main className="page-wrap px-4 py-10 sm:py-16"><section className="mx-auto max-w-3xl rounded-[2rem] border border-[var(--line)] bg-[var(--surface-strong)] p-6 shadow-[0_24px_70px_rgba(15,55,52,0.10)] sm:p-10">
     <div className="mb-7 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--hero-a)] text-[var(--sea-ink)]"><Database size={25} /></div><p className="island-kicker mb-2">Workspace initialization</p><h1 className="display-title mb-3 text-4xl font-bold text-[var(--sea-ink)] sm:text-5xl">Set up your workspace</h1><p className="mb-8 max-w-2xl text-sm leading-7 text-[var(--sea-ink-soft)]">Initialize an administrator and sample products for this in-memory installation. Running setup again is safe: an existing administrator is not duplicated.</p>
     <div className="grid gap-3 sm:grid-cols-2"><SetupInfo icon={<ShieldCheck size={18} />} title="Role protection" body="Admin-only actions remain restricted." /><SetupInfo icon={<UserRoundCog size={18} />} title="Starter account" body="A default administrator account is provisioned." /></div>
