@@ -17,30 +17,18 @@ export const productSchema = z.object({
   imageUrl: imageUrlSchema.optional().default(""),
 });
 export type ProductInput = z.infer<typeof productSchema>;
-
 export const getProducts = createServerFn({ method: "GET" }).handler(async () => { await requireAuth(); return [...db.product].sort((a,b) => b.createdAt.localeCompare(a.createdAt)) as Product[]; });
-
 export const createProduct = createServerFn({ method: "POST" }).validator(productSchema).handler(async ({ data }) => {
-  await requireAdmin();
-  const now = new Date().toISOString();
-  const product = { id: crypto.randomUUID(), ...data, createdAt: now, updatedAt: now } as Product;
-  db.product.push(product);
-  return product;
+  await requireAdmin(); const now = new Date().toISOString();
+  const product = { id: crypto.randomUUID(), ...data, createdAt: now, updatedAt: now } as Product; db.product.push(product); return product;
 });
-
 export const updateProduct = createServerFn({ method: "POST" }).validator(z.object({ id: z.string().min(1), ...productSchema.shape })).handler(async ({ data }) => {
-  await requireAdmin();
-  const index = db.product.findIndex((product) => product.id === data.id);
+  await requireAdmin(); const index = db.product.findIndex((product) => product.id === data.id);
   if (index === -1) { const err = new Error("Product not found.") as Error & { status?: number }; err.status = 404; throw err; }
-  const updated = { ...db.product[index], ...data, updatedAt: new Date().toISOString() } as Product;
-  db.product[index] = updated;
-  return updated;
+  const updated = { ...db.product[index], ...data, updatedAt: new Date().toISOString() } as Product; db.product[index] = updated; return updated;
 });
-
 export const deleteProduct = createServerFn({ method: "POST" }).validator(z.object({ id: z.string().min(1) })).handler(async ({ data }) => {
-  await requireAdmin();
-  const index = db.product.findIndex((product) => product.id === data.id);
+  await requireAdmin(); const index = db.product.findIndex((product) => product.id === data.id);
   if (index === -1) { const err = new Error("Product not found.") as Error & { status?: number }; err.status = 404; throw err; }
-  db.product.splice(index, 1);
-  return { ok: true };
+  db.product.splice(index, 1); return { ok: true };
 });
