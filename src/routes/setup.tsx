@@ -51,7 +51,10 @@ function Setup() {
 					</button>
 
 					{status !== "idle" && (
-						<div className="mt-4 p-4 rounded-xl bg-[var(--chip-bg)] border border-[var(--line)]">
+						<div
+							aria-live="polite"
+							className="mt-4 p-4 rounded-xl bg-[var(--chip-bg)] border border-[var(--line)]"
+						>
 							<p
 								className={`m-0 text-sm ${
 									status === "success"

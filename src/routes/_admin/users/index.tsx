@@ -15,6 +15,8 @@ import {
 } from "@tanstack/react-table";
 import {
 	AlertTriangle,
+	ArrowDown,
+	ArrowUp,
 	ArrowUpDown,
 	Lock,
 	RefreshCw,
@@ -292,32 +294,44 @@ function UsersPage() {
 								<thead>
 									{table.getHeaderGroups().map((headerGroup) => (
 										<tr key={headerGroup.id} className="border-b border-[var(--line)]">
-											{headerGroup.headers.map((header) => (
-												<th
-													key={header.id}
-													colSpan={header.colSpan}
-													className="bg-[var(--chip-bg)] px-4 py-3 text-left text-xs font-semibold tracking-wide text-[var(--sea-ink-soft)] uppercase"
-												>
-													{header.isPlaceholder ? null : header.column.getCanSort() ? (
-														<button
-															type="button"
-															onClick={header.column.getToggleSortingHandler()}
-															className="inline-flex items-center gap-1.5 font-semibold text-inherit uppercase transition hover:text-[var(--sea-ink)]"
-														>
-															{flexRender(header.column.columnDef.header, header.getContext())}
-															<ArrowUpDown
-																className={`size-3 ${
-																	header.column.getIsSorted()
-																		? "text-[var(--lagoon-deep)]"
-																		: "opacity-40"
-																}`}
-															/>
-														</button>
-													) : (
-														flexRender(header.column.columnDef.header, header.getContext())
-													)}
-												</th>
-											))}
+											{headerGroup.headers.map((header) => {
+												const sorted = header.column.getIsSorted();
+												return (
+													<th
+														key={header.id}
+														colSpan={header.colSpan}
+														aria-sort={
+															!header.column.getCanSort()
+																? undefined
+																: sorted === "asc"
+																	? "ascending"
+																	: sorted === "desc"
+																		? "descending"
+																		: "none"
+														}
+														className="bg-[var(--chip-bg)] px-4 py-3 text-left text-xs font-semibold tracking-wide text-[var(--sea-ink-soft)] uppercase"
+													>
+														{header.isPlaceholder ? null : header.column.getCanSort() ? (
+															<button
+																type="button"
+																onClick={header.column.getToggleSortingHandler()}
+																className="inline-flex items-center gap-1.5 font-semibold text-inherit uppercase transition hover:text-[var(--sea-ink)] focus-visible:ring-2 focus-visible:ring-[var(--lagoon-deep)] focus-visible:outline-none"
+															>
+																{flexRender(header.column.columnDef.header, header.getContext())}
+																{sorted === "asc" ? (
+																	<ArrowUp className="size-3 text-[var(--lagoon-deep)]" />
+																) : sorted === "desc" ? (
+																	<ArrowDown className="size-3 text-[var(--lagoon-deep)]" />
+																) : (
+																	<ArrowUpDown className="size-3 opacity-40" />
+																)}
+															</button>
+														) : (
+															flexRender(header.column.columnDef.header, header.getContext())
+														)}
+													</th>
+												);
+											})}
 										</tr>
 									))}
 								</thead>

@@ -12,7 +12,7 @@ import {
 	Users,
 	X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { authClient } from "@/lib/auth-client";
 import { useAuth } from "@/lib/auth-context";
@@ -31,6 +31,24 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const [collapsed, setCollapsed] = useState(false);
+	const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+	// Polish the mobile drawer: close on Escape, lock background scrolling, and
+	// move focus into the drawer so keyboard/screen-reader users land inside it.
+	useEffect(() => {
+		if (!mobileOpen) return;
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") setMobileOpen(false);
+		};
+		const previousOverflow = document.body.style.overflow;
+		document.body.style.overflow = "hidden";
+		document.addEventListener("keydown", onKeyDown);
+		closeButtonRef.current?.focus();
+		return () => {
+			document.removeEventListener("keydown", onKeyDown);
+			document.body.style.overflow = previousOverflow;
+		};
+	}, [mobileOpen]);
 
 	const items = NAV_ITEMS.filter((item) => !item.adminOnly || role === "admin");
 	const isActive = (to: string) => pathname === to || pathname.startsWith(`${to}/`);
@@ -52,6 +70,8 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 			)}
 
 			<aside
+				id="admin-sidebar"
+				aria-label="Admin navigation"
 				className={cn(
 					"fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[var(--line)] bg-[var(--header-bg)] backdrop-blur-lg transition-[transform,width] duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
 					mobileOpen ? "translate-x-0" : "-translate-x-full",
@@ -73,10 +93,11 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 						</span>
 					)}
 					<button
+						ref={closeButtonRef}
 						type="button"
 						aria-label="Close navigation"
 						onClick={() => setMobileOpen(false)}
-						className="ml-auto rounded-md p-1 text-[var(--sea-ink-soft)] hover:bg-[var(--link-bg-hover)] lg:hidden"
+						className="ml-auto rounded-md p-1 text-[var(--sea-ink-soft)] hover:bg-[var(--link-bg-hover)] focus-visible:ring-2 focus-visible:ring-[var(--lagoon-deep)] focus-visible:outline-none lg:hidden"
 					>
 						<X className="size-4" />
 					</button>
@@ -165,8 +186,10 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 					<button
 						type="button"
 						aria-label="Open navigation"
+						aria-controls="admin-sidebar"
+						aria-expanded={mobileOpen}
 						onClick={() => setMobileOpen(true)}
-						className="rounded-md p-1.5 text-[var(--sea-ink-soft)] hover:bg-[var(--link-bg-hover)]"
+						className="rounded-md p-1.5 text-[var(--sea-ink-soft)] hover:bg-[var(--link-bg-hover)] focus-visible:ring-2 focus-visible:ring-[var(--lagoon-deep)] focus-visible:outline-none"
 					>
 						<Menu className="size-5" />
 					</button>
