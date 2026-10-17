@@ -48,10 +48,14 @@ bun dev                       # http://localhost:3000
 
 Improve at least **3 pages** (suggested: Home, Dashboard, Products).
 
+- [ ] **Sidebar layout** for the dashboard area (Dashboard, Products, Users) with icons per nav item (e.g. `lucide-react`); collapsible + hamburger drawer on mobile
+- [ ] Replace the separate `/products/new` and edit pages with **modal dialogs** — every **Create** and **Update** action (products, user roles) opens in a popup modal, not a full page
 - [ ] Responsive at mobile width (no desktop-only tables)
 - [ ] Consistent spacing / typography / colors; dark mode works via `ThemeToggle`
 - [ ] Loading, empty, and error states on data pages
 - [ ] Stick to Tailwind + existing shadcn `ui/` components — no framework swap
+
+> 💡 shadcn's `dialog.tsx` is already in `src/components/ui/` — build your modals on it. If you convert create/edit to modals, the old routes may be removed or kept as redirects; make sure all links still work.
 
 ## 4 · Task B — Fix Errors (Required)
 
