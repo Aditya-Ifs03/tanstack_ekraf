@@ -3,7 +3,6 @@ import { ArrowRight, BarChart3, Boxes, ShieldCheck, Sparkles, Users } from "luci
 import { authClient } from "#/lib/auth-client";
 
 export const Route = createFileRoute("/")({ component: Home });
-
 function Home() {
   const { data: session, isPending } = authClient.useSession();
   return <main className="page-wrap px-4 py-10 sm:py-16">
