@@ -9,8 +9,8 @@ import { getServerSession } from "@/lib/server/auth";
 import { deleteUser, getUsers, updateUserRole } from "@/lib/server/users";
 
 type UserRow = { id: string; email: string; name: string | null; role: Role; emailVerified: boolean; createdAt: string; };
-export const Route = createFileRoute("/users/")({ beforeLoad: async () => { const { session } = await getServerSession(); if (!session) throw redirect({ to: "/login" }); }, component: Users });
-function Users() {
+export const Route = createFileRoute("/users/")({ beforeLoad: async () => { const { session } = await getServerSession(); if (!session) throw redirect({ to: "/login" }); }, component: UsersPage });
+function UsersPage() {
   const queryClient = useQueryClient();
   const usersQuery = useQuery({ queryKey: ["users"], queryFn: async () => getUsers() });
   const updateRoleFn = useServerFn(updateUserRole); const deleteFn = useServerFn(deleteUser);
