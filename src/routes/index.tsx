@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BarChart3, Boxes, ShieldCheck, Sparkles, Users } from "lucide-react";
 import { authClient } from "#/lib/auth-client";
 
